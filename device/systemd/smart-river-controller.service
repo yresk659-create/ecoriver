@@ -1,0 +1,18 @@
+[Unit]
+Description=Smart River controller (ESP32 UART, camera, and AI)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/SmartRiver
+EnvironmentFile=/home/pi/SmartRiver/device/riverwatch-bridge.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/pi/SmartRiver/.venv/bin/python3 "/home/pi/SmartRiver/device/final v3.2.py"
+Restart=on-failure
+RestartSec=5
+SupplementaryGroups=dialout video
+
+[Install]
+WantedBy=multi-user.target
