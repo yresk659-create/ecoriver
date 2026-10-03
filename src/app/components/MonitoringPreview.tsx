@@ -2,7 +2,7 @@ import { ChartNoAxesCombined, LayoutDashboard, ScanSearch } from 'lucide-react';
 import Reveal from '@/components/ui/Reveal';
 
 const monitoringSteps = [
-  { icon: LayoutDashboard, title: 'Buka dashboard', text: 'Masuk ke ruang monitoring untuk melihat ringkasan perangkat Smart River.' },
+  { icon: LayoutDashboard, title: 'Buka dashboard', text: 'Masuk ke ruang monitoring untuk melihat ringkasan perangkat EcoRiver.' },
   { icon: ScanSearch, title: 'Temukan informasi', text: 'Telusuri pembacaan sensor, status perangkat, peringatan, dan deteksi dari satu tempat.' },
   { icon: ChartNoAxesCombined, title: 'Amati perubahan', text: 'Gunakan data terbaru dan riwayat grafik untuk memahami perubahan kondisi dari waktu ke waktu.' },
 ];
@@ -17,7 +17,7 @@ export default function MonitoringPreview() {
           </div>
           <h2 className="text-section-title text-foreground">Mulai memantau dengan alur yang sederhana</h2>
           <p className="mx-auto mt-5 text-sm leading-7 text-muted-foreground lg:text-base">
-            Smart River membantu Anda berpindah dari ringkasan umum menuju informasi perangkat yang lebih terperinci dalam beberapa langkah.
+            EcoRiver membantu Anda berpindah dari ringkasan umum menuju informasi perangkat yang lebih terperinci dalam beberapa langkah.
           </p>
         </Reveal>
         <div className="grid gap-4 md:grid-cols-3">

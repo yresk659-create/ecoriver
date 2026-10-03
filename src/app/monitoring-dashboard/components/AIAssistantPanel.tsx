@@ -238,7 +238,7 @@ export default function AIAssistantPanel() {
                       <div className="flex flex-wrap gap-1">
                         {msg.sources.map((s) => (
                           <span key={`src-${msg.id}-${s}`} className="text-xs bg-background/50 px-1.5 py-0.5 rounded text-muted-foreground">
-                            {s === 'smart-river-hardware' ? 'Perangkat Smart River' : s}
+                            {s === 'ecoriver-hardware' ? 'Perangkat EcoRiver' : s}
                           </span>
                         ))}
                       </div>

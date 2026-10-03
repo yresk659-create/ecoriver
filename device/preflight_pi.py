@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preflight pemeriksaan Smart River pada Raspberry Pi.
+"""Preflight pemeriksaan EcoRiver pada Raspberry Pi.
 
 Jalankan setelah environment file dimuat dan sebelum menyalakan service:
 
@@ -73,7 +73,7 @@ def check_origin(origin: str | None) -> None:
         return
     parsed = urlparse(origin)
     if parsed.scheme != "https" or not parsed.netloc:
-        failure("RIVERWATCH_ORIGIN harus berupa URL HTTPS publik, misalnya https://smart-river-lilac.vercel.app")
+        failure("RIVERWATCH_ORIGIN harus berupa URL HTTPS publik, misalnya https://ecoriver-lilac.vercel.app")
         return
     report(CHECK_MARK, "RIVERWATCH_ORIGIN memakai HTTPS.")
 
@@ -149,7 +149,7 @@ def check_camera(cv2_module: Any | None, skip: bool) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Pemeriksaan deployment Raspberry Pi Smart River")
+    parser = argparse.ArgumentParser(description="Pemeriksaan deployment Raspberry Pi EcoRiver")
     parser.add_argument("--skip-camera", action="store_true", help="Jangan membuka kamera pada pemeriksaan ini")
     args = parser.parse_args()
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { BarChart3, Clock3 } from 'lucide-react';
-import type { SmartRiverDeviceState } from '@/lib/types';
+import type { EcoRiverDeviceState } from '@/lib/types';
 
 /**
  * Analytics landing section for the direct-device telemetry view.
@@ -12,7 +12,7 @@ import type { SmartRiverDeviceState } from '@/lib/types';
  * points. Once history is available, the section can be replaced by the
  * chart components without changing the sidebar target.
  */
-export default function DeviceAnalyticsPanel({ state }: { state: SmartRiverDeviceState }) {
+export default function DeviceAnalyticsPanel({ state }: { state: EcoRiverDeviceState }) {
   const observedAt = new Date(state.observedAt);
   const observedLabel = Number.isFinite(observedAt.getTime())
     ? observedAt.toLocaleString('id-ID')
@@ -33,7 +33,7 @@ export default function DeviceAnalyticsPanel({ state }: { state: SmartRiverDevic
             Analitik perangkat
           </h2>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
-            Ringkasan analitik akan dihitung dari riwayat telemetri Smart River.
+            Ringkasan analitik akan dihitung dari riwayat telemetri EcoRiver.
           </p>
         </div>
       </div>

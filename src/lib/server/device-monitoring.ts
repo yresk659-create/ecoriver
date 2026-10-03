@@ -2,7 +2,7 @@ import 'server-only';
 
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
-import type { AIDetection, SmartRiverDeviceState } from '@/lib/types';
+import type { AIDetection, EcoRiverDeviceState } from '@/lib/types';
 import { getDatabasePool, withTransaction } from './db';
 import { requireServerEnv, ServerConfigurationError } from './config';
 
@@ -109,7 +109,7 @@ export function requireDeviceRequestAuth(request: Request): string {
   }
 
   const expectedDeviceId = configuredDeviceId();
-  const suppliedDeviceId = request.headers.get('x-smart-river-source')?.trim();
+  const suppliedDeviceId = request.headers.get('x-ecoriver-source')?.trim();
   if (suppliedDeviceId && suppliedDeviceId !== expectedDeviceId) {
     throw new DeviceIntegrationError(403, 'Identitas perangkat tidak diizinkan.');
   }
@@ -132,7 +132,7 @@ export function normalizeDeviceTelemetry(
   value: unknown,
   deviceId: string,
   now = new Date()
-): { state: SmartRiverDeviceState; sequence?: number } {
+): { state: EcoRiverDeviceState; sequence?: number } {
   const parsed = deviceTelemetryInputSchema.safeParse(value);
   if (!parsed.success) {
     throw new DeviceIntegrationError(
@@ -147,7 +147,7 @@ export function normalizeDeviceTelemetry(
     ? parsed.data.confidence * 100
     : parsed.data.confidence;
   const receivedAt = now.toISOString();
-  const state: SmartRiverDeviceState = {
+  const state: EcoRiverDeviceState = {
     schemaVersion: 1,
     deviceId,
     observedAt: normalizedObservedAt(parsed.data.observedAt, now),
@@ -178,19 +178,19 @@ export function normalizeDeviceTelemetry(
 export async function storeDeviceTelemetry(
   value: unknown,
   deviceId: string
-): Promise<SmartRiverDeviceState> {
+): Promise<EcoRiverDeviceState> {
   const normalized = normalizeDeviceTelemetry(value, deviceId);
   const payload = JSON.stringify(normalized.state);
 
   await withTransaction(async (client) => {
     await client.query(
-      `INSERT INTO public.smart_river_telemetry
+      `INSERT INTO public.ecoriver_telemetry
          (device_id, sequence, observed_at, received_at, payload)
        SELECT $1, $2, $3, $4, $5::jsonb
         WHERE $6::boolean
            OR NOT EXISTS (
              SELECT 1
-               FROM public.smart_river_telemetry
+               FROM public.ecoriver_telemetry
               WHERE device_id = $1
                 AND received_at >= $4::timestamptz - INTERVAL '60 seconds'
            )
@@ -205,19 +205,19 @@ export async function storeDeviceTelemetry(
       ]
     );
     await client.query(
-      `INSERT INTO public.smart_river_device_state
+      `INSERT INTO public.ecoriver_device_state
          (device_id, observed_at, received_at, payload)
        VALUES ($1, $2, $3, $4::jsonb)
        ON CONFLICT (device_id) DO UPDATE SET
          observed_at = EXCLUDED.observed_at,
          received_at = EXCLUDED.received_at,
          payload = EXCLUDED.payload
-       WHERE EXCLUDED.observed_at >= public.smart_river_device_state.observed_at`,
+       WHERE EXCLUDED.observed_at >= public.ecoriver_device_state.observed_at`,
       [deviceId, normalized.state.observedAt, normalized.state.receivedAt, payload]
     );
     if (normalized.sequence !== undefined && normalized.sequence % 100 === 0) {
       await client.query(
-        `DELETE FROM public.smart_river_telemetry
+        `DELETE FROM public.ecoriver_telemetry
           WHERE device_id = $1
             AND received_at < NOW() - INTERVAL '30 days'`,
         [deviceId]
@@ -234,7 +234,7 @@ interface TelemetryRow {
 }
 
 export interface StoredDeviceMonitoring {
-  state: SmartRiverDeviceState;
+  state: EcoRiverDeviceState;
   detections: AIDetection[];
   hasImage: boolean;
 }
@@ -243,12 +243,12 @@ export async function readStoredDeviceMonitoring(deviceId: string): Promise<Stor
   const pool = getDatabasePool();
   const [latestResult, detectionResult, imageResult] = await Promise.all([
     pool.query<{ payload: unknown }>(
-      'SELECT payload FROM public.smart_river_device_state WHERE device_id = $1 LIMIT 1',
+      'SELECT payload FROM public.ecoriver_device_state WHERE device_id = $1 LIMIT 1',
       [deviceId]
     ),
     pool.query<TelemetryRow>(
       `SELECT id, payload
-         FROM public.smart_river_telemetry
+         FROM public.ecoriver_telemetry
         WHERE device_id = $1
           AND payload ->> 'trashDetected' = 'true'
         ORDER BY observed_at DESC
@@ -256,7 +256,7 @@ export async function readStoredDeviceMonitoring(deviceId: string): Promise<Stor
       [deviceId]
     ),
     pool.query(
-      'SELECT 1 FROM public.smart_river_device_images WHERE device_id = $1 LIMIT 1',
+      'SELECT 1 FROM public.ecoriver_device_images WHERE device_id = $1 LIMIT 1',
       [deviceId]
     ),
   ]);
@@ -267,7 +267,7 @@ export async function readStoredDeviceMonitoring(deviceId: string): Promise<Stor
   const location =
     state.data.latitude !== 0 || state.data.longitude !== 0
       ? `${state.data.latitude.toFixed(6)}, ${state.data.longitude.toFixed(6)}`
-      : 'Smart River';
+      : 'EcoRiver';
   const detections = detectionResult.rows.flatMap((row, index) => {
     const detectionState = storedDeviceStateSchema.safeParse(row.payload);
     if (!detectionState.success) return [];
@@ -275,7 +275,7 @@ export async function readStoredDeviceMonitoring(deviceId: string): Promise<Stor
       {
         id: `${deviceId}-${row.id}`,
         cameraId: `${deviceId}-camera`,
-        cameraName: 'Kamera Smart River',
+        cameraName: 'Kamera EcoRiver',
         objectType: 'Sampah',
         confidence: detectionState.data.detectionConfidence,
         timestamp: detectionState.data.observedAt,
@@ -294,7 +294,7 @@ export async function storeDeviceImage(
   bytes: Buffer
 ): Promise<void> {
   await getDatabasePool().query(
-    `INSERT INTO public.smart_river_device_images (device_id, content_type, image_data, uploaded_at)
+    `INSERT INTO public.ecoriver_device_images (device_id, content_type, image_data, uploaded_at)
      VALUES ($1, $2, $3, NOW())
      ON CONFLICT (device_id) DO UPDATE SET
        content_type = EXCLUDED.content_type,
@@ -313,7 +313,7 @@ export async function readDeviceImage(
     uploaded_at: Date;
   }>(
     `SELECT content_type, image_data, uploaded_at
-       FROM public.smart_river_device_images
+       FROM public.ecoriver_device_images
       WHERE device_id = $1
       LIMIT 1`,
     [deviceId]

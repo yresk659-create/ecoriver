@@ -2,13 +2,13 @@ import type {
   AIDetection,
   RiverAlert,
   SensorReading,
-  SmartRiverComponentHealthMap,
-  SmartRiverDeviceState,
+  EcoRiverComponentHealthMap,
+  EcoRiverDeviceState,
   WaterLevelDataPoint,
   WaterQualityDataPoint,
 } from './types';
 
-const componentHealthKeys: (keyof SmartRiverComponentHealthMap)[] = [
+const componentHealthKeys: (keyof EcoRiverComponentHealthMap)[] = [
   'camera',
   'esp32',
   'ina219',
@@ -45,13 +45,13 @@ function isComponentHealth(value: unknown): boolean {
   );
 }
 
-function isComponentHealthMap(value: unknown): value is SmartRiverComponentHealthMap | undefined {
+function isComponentHealthMap(value: unknown): value is EcoRiverComponentHealthMap | undefined {
   if (value === undefined) return true;
   if (!isRecord(value)) return false;
   return componentHealthKeys.every((key) => value[key] === undefined || isComponentHealth(value[key]));
 }
 
-function isSmartRiverDeviceState(value: unknown): value is SmartRiverDeviceState {
+function isEcoRiverDeviceState(value: unknown): value is EcoRiverDeviceState {
   if (!isRecord(value)) return false;
   return (
     value.schemaVersion === 1 &&
@@ -97,7 +97,7 @@ export interface MonitoringApiResponse {
     readings: WaterQualityDataPoint[];
   };
   objectDetections: AIDetection[];
-  deviceState: SmartRiverDeviceState | null;
+  deviceState: EcoRiverDeviceState | null;
 }
 
 export function isMonitoringApiResponse(value: unknown): value is MonitoringApiResponse {
@@ -121,6 +121,6 @@ export function isMonitoringApiResponse(value: unknown): value is MonitoringApiR
     typeof candidate.waterQuality === 'object' &&
     Array.isArray(candidate.waterQuality.readings) &&
     Array.isArray(candidate.objectDetections) &&
-    (candidate.deviceState === null || isSmartRiverDeviceState(candidate.deviceState))
+    (candidate.deviceState === null || isEcoRiverDeviceState(candidate.deviceState))
   );
 }

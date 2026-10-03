@@ -42,11 +42,11 @@ export default function LandingNavbar() {
       `}
     >
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 lg:px-8">
-        <Link href="#hero" className="group flex items-center gap-2.5 rounded-lg" aria-label="Smart River, kembali ke beranda">
+        <Link href="#hero" className="group flex items-center gap-2.5 rounded-lg" aria-label="EcoRiver, kembali ke beranda">
           <span className="transition-transform duration-300 ease-out group-hover:scale-105">
             <AppLogo size={34} />
           </span>
-          <span className="text-[0.95rem] font-semibold tracking-[-0.02em] text-foreground">Smart River</span>
+          <span className="text-[0.95rem] font-semibold tracking-[-0.02em] text-foreground">EcoRiver</span>
         </Link>
 
         <nav className="hidden items-center gap-0.5 md:flex" aria-label="Navigasi utama">

@@ -1,10 +1,10 @@
-# Integrasi Raspberry Pi Smart River ke RiverWatch
+# Integrasi Raspberry Pi EcoRiver ke RiverWatch
 
 Bridge ini menghubungkan program `final v3.2.py` dengan API RiverWatch tanpa membuka Flask Raspberry Pi ke internet. Telemetri dan gambar bergerak keluar dari Raspberry Pi menuju RiverWatch melalui HTTPS.
 
 ## Firmware ESP32
 
-Sketch siap unggah tersedia di [`esp32_smart_river.ino`](esp32_smart_river/esp32_smart_river.ino).
+Sketch siap unggah tersedia di [`esp32_ecoriver.ino`](esp32_ecoriver/esp32_ecoriver.ino).
 Sketch ini memakai JSON per baris (NDJSON) dua arah pada UART2: telemetry dan
 ACK dikirim ESP32 ke Raspberry Pi, sedangkan command JSON dikirim Pi ke ESP32.
 Baud UART Pi mengikuti firmware terbaru, yaitu `115200` (Serial Monitor USB
@@ -88,7 +88,7 @@ stepper ULN2003 membutuhkan tiga jalur tambahan yang belum diberikan.
 Contoh telemetry yang dikirim:
 
 ```json
-{"type":"telemetry","seq":12,"ldr":1234,"water":850,"distance":48.2,"voltage":5.1,"current":210.0,"power":1.07,"components":{"esp32":{"status":"ok","detail":"ESP32 aktif dan firmware Smart River berjalan."},"ina219":{"status":"ok","detail":"INA219 mengirim pembacaan tegangan, arus, dan daya terbaru."},"servo":{"status":"unknown","detail":"Sudut servo diterapkan; servo ini tidak memiliki sensor posisi untuk verifikasi fisik."}}}
+{"type":"telemetry","seq":12,"ldr":1234,"water":850,"distance":48.2,"voltage":5.1,"current":210.0,"power":1.07,"components":{"esp32":{"status":"ok","detail":"ESP32 aktif dan firmware EcoRiver berjalan."},"ina219":{"status":"ok","detail":"INA219 mengirim pembacaan tegangan, arus, dan daya terbaru."},"servo":{"status":"unknown","detail":"Sudut servo diterapkan; servo ini tidak memiliki sensor posisi untuk verifikasi fisik."}}}
 ```
 
 Contoh command dari Raspberry Pi ke ESP32:
@@ -127,7 +127,7 @@ Tambahkan environment variable berikut ke project RiverWatch:
 
 ```env
 SMART_RIVER_MONITORING_URL=
-SMART_RIVER_SOURCE_ID=smart-river-hardware
+SMART_RIVER_SOURCE_ID=ecoriver-hardware
 SMART_RIVER_MONITORING_TOKEN=TOKEN_ACAK_YANG_KUAT
 SMART_RIVER_DEVICE_STALE_SECONDS=30
 SMART_RIVER_IMAGE_MAX_BYTES=2000000
@@ -160,30 +160,30 @@ Salin atau clone berkas berikut (sketch `.ino` tetap disimpan untuk ESP32 dan
 tidak perlu dijalankan di Pi):
 
 ```text
-/home/pi/SmartRiver/device/final v3.2.py
-/home/pi/SmartRiver/device/riverwatch_bridge.py
-/home/pi/SmartRiver/device/best.onnx
-/home/pi/SmartRiver/device/requirements-pi.txt
-/home/pi/SmartRiver/device/riverwatch-bridge.env
+/home/pi/EcoRiver/device/final v3.2.py
+/home/pi/EcoRiver/device/riverwatch_bridge.py
+/home/pi/EcoRiver/device/best.onnx
+/home/pi/EcoRiver/device/requirements-pi.txt
+/home/pi/EcoRiver/device/riverwatch-bridge.env
 ```
 
 Cara yang paling mudah jika repository sudah ada di GitHub:
 
 ```bash
 cd /home/pi
-git clone <URL_REPOSITORY_ANDA> SmartRiver
-cd /home/pi/SmartRiver
+git clone <URL_REPOSITORY_ANDA> EcoRiver
+cd /home/pi/EcoRiver
 ```
 
 Jika repository private, gunakan URL SSH/token GitHub. Jika tidak ingin
 memakai Git, salin lima berkas di atas melalui USB atau `scp` dari Windows:
 
 ```powershell
-scp ".\device\final v3.2.py" pi@IP_RASPBERRY_PI:/home/pi/SmartRiver/device/
-scp ".\device\riverwatch_bridge.py" pi@IP_RASPBERRY_PI:/home/pi/SmartRiver/device/
-scp ".\device\best.onnx" pi@IP_RASPBERRY_PI:/home/pi/SmartRiver/device/
-scp ".\device\requirements-pi.txt" pi@IP_RASPBERRY_PI:/home/pi/SmartRiver/device/
-scp ".\device\riverwatch-bridge.env.example" pi@IP_RASPBERRY_PI:/home/pi/SmartRiver/device/
+scp ".\device\final v3.2.py" pi@IP_RASPBERRY_PI:/home/pi/EcoRiver/device/
+scp ".\device\riverwatch_bridge.py" pi@IP_RASPBERRY_PI:/home/pi/EcoRiver/device/
+scp ".\device\best.onnx" pi@IP_RASPBERRY_PI:/home/pi/EcoRiver/device/
+scp ".\device\requirements-pi.txt" pi@IP_RASPBERRY_PI:/home/pi/EcoRiver/device/
+scp ".\device\riverwatch-bridge.env.example" pi@IP_RASPBERRY_PI:/home/pi/EcoRiver/device/
 ```
 
 Setelah itu, jalankan langkah berikut di Raspberry Pi OS **64-bit** (arsitektur
@@ -192,7 +192,7 @@ Setelah itu, jalankan langkah berikut di Raspberry Pi OS **64-bit** (arsitektur
 Cara cepat (script ini tidak menjalankan aktuator atau service):
 
 ```bash
-cd /home/pi/SmartRiver
+cd /home/pi/EcoRiver
 bash device/install_pi.sh
 ```
 
@@ -203,7 +203,7 @@ yang dipasang:
 uname -m
 sudo apt update
 sudo apt install -y python3-venv python3-pip python3-opencv libopenblas-dev libgomp1 v4l-utils
-cd /home/pi/SmartRiver
+cd /home/pi/EcoRiver
 python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
@@ -237,7 +237,7 @@ Pi OS 64-bit atau runtime ONNX yang sesuai dengan board tersebut.
 Salin template dan isi nilainya:
 
 ```bash
-cd /home/pi/SmartRiver
+cd /home/pi/EcoRiver
 cp device/riverwatch-bridge.env.example device/riverwatch-bridge.env
 nano device/riverwatch-bridge.env
 ```
@@ -245,8 +245,8 @@ nano device/riverwatch-bridge.env
 Nilai minimal yang harus benar:
 
 ```env
-RIVERWATCH_ORIGIN=https://smart-river-lilac.vercel.app
-RIVERWATCH_DEVICE_ID=smart-river-hardware
+RIVERWATCH_ORIGIN=https://ecoriver-lilac.vercel.app
+RIVERWATCH_DEVICE_ID=ecoriver-hardware
 RIVERWATCH_DEVICE_TOKEN=TOKEN_YANG_SAMA_DENGAN_VERCEL
 RIVERWATCH_HEARTBEAT_SECONDS=5
 RIVERWATCH_BRIDGE_PORT=5050
@@ -254,7 +254,7 @@ SMART_RIVER_LOCAL_STATUS_URL=http://127.0.0.1:5000/status
 SMART_RIVER_SERIAL_PORT=/dev/serial0
 SMART_RIVER_SERIAL_BAUD=115200
 SMART_RIVER_SERIAL_TIMEOUT=0.1
-SMART_RIVER_MODEL_PATH=/home/pi/SmartRiver/device/best.onnx
+SMART_RIVER_MODEL_PATH=/home/pi/EcoRiver/device/best.onnx
 SMART_RIVER_CAMERA_INDEX=0
 SMART_RIVER_SHOW_PREVIEW=0
 SMART_RIVER_AUTONOMOUS=0
@@ -275,7 +275,7 @@ Setelah environment diisi dan sebelum menjalankan controller, gunakan pemeriksa
 yang tersedia. Ia tidak mengirim perintah gerak ke ESP32.
 
 ```bash
-cd /home/pi/SmartRiver
+cd /home/pi/EcoRiver
 source .venv/bin/activate
 set -a; source device/riverwatch-bridge.env; set +a
 python3 device/preflight_pi.py
@@ -298,7 +298,7 @@ environment terlebih dahulu.
 Terminal 1 — bridge HTTPS:
 
 ```bash
-cd /home/pi/SmartRiver
+cd /home/pi/EcoRiver
 source .venv/bin/activate
 set -a; source device/riverwatch-bridge.env; set +a
 python3 device/riverwatch_bridge.py
@@ -307,7 +307,7 @@ python3 device/riverwatch_bridge.py
 Terminal 2 — kamera, AI, dan server lokal:
 
 ```bash
-cd /home/pi/SmartRiver
+cd /home/pi/EcoRiver
 source .venv/bin/activate
 set -a; source device/riverwatch-bridge.env; set +a
 python3 "device/final v3.2.py"
@@ -323,27 +323,27 @@ Setelah pengujian manual berhasil, unit systemd sudah disediakan di
 [`systemd/`](systemd/). Salin dan aktifkan sebagai berikut:
 
 ```bash
-sudo cp device/systemd/smart-river-controller.service /etc/systemd/system/
+sudo cp device/systemd/ecoriver-controller.service /etc/systemd/system/
 sudo cp device/systemd/riverwatch-bridge.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now smart-river-controller.service
+sudo systemctl enable --now ecoriver-controller.service
 sudo systemctl enable --now riverwatch-bridge.service
-sudo systemctl status smart-river-controller.service --no-pager
+sudo systemctl status ecoriver-controller.service --no-pager
 sudo systemctl status riverwatch-bridge.service --no-pager
 ```
 
 Sebelum mengaktifkan service, pastikan lokasi proyek tetap
-`/home/pi/SmartRiver`, user Pi bernama `pi`, dan environment file telah diisi.
+`/home/pi/EcoRiver`, user Pi bernama `pi`, dan environment file telah diisi.
 Jika berbeda, ubah path/user pada dua file `.service`. Untuk melihat log:
 
 ```bash
-journalctl -u smart-river-controller.service -f
+journalctl -u ecoriver-controller.service -f
 journalctl -u riverwatch-bridge.service -f
 ```
 
 ## 5. Flash ESP32 dan pengujian bertahap
 
-Sebelum menyalakan motor, unggah sketch `esp32_smart_river.ino` dari Arduino
+Sebelum menyalakan motor, unggah sketch `esp32_ecoriver.ino` dari Arduino
 IDE dengan **Board: ESP32 Dev Module**. Pada wiring terbaru, pindahkan kabel
 L298N **IN4 ke GPIO0** dan biarkan INA219 **SCL di GPIO22**. GPIO0 dan ENB
 GPIO12 adalah pin strap boot:
@@ -359,7 +359,7 @@ GPIO12 adalah pin strap boot:
 Uji dengan urutan aman berikut:
 
 1. ESP32 saja melalui USB; buka Serial Monitor pada `115200`. Pastikan pesan
-   `Smart River ESP32 siap` muncul.
+   `EcoRiver ESP32 siap` muncul.
 2. Hubungkan UART Pi (GPIO14/15) dan jalankan program utama. Periksa bahwa
    `/status` menerima `components` dan nilai sensor.
 3. Sambungkan kamera dan uji deteksi dengan motor/pompa tetap tidak bertenaga.
@@ -393,7 +393,7 @@ RiverWatch menggunakan data nyata yang tersedia pada program alat:
 - deteksi sampah dan confidence; serta
 - gambar deteksi terbaru.
 
-Versi `final v3.2.py` dan sketch `esp32_smart_river.ino` yang sudah disiapkan
+Versi `final v3.2.py` dan sketch `esp32_ecoriver.ino` yang sudah disiapkan
 juga mengirim objek opsional `components` untuk viewer 3D dan kartu diagnostik.
 Status `ok` menghasilkan centang hijau, `error` menghasilkan silang merah, dan
 `unknown` berarti komponen belum dapat dibuktikan sehat (misalnya aktuator tidak

@@ -217,7 +217,7 @@ export default function AuthForm({ initialTab = 'login' }: { initialTab?: AuthTa
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-3 mb-2">
             <AppLogo size={44} />
-            <span className="text-2xl font-semibold tracking-[-0.035em] text-foreground">Smart River</span>
+            <span className="text-2xl font-semibold tracking-[-0.035em] text-foreground">EcoRiver</span>
           </div>
           <p className="text-sm text-muted-foreground">RiverWatch Monitoring Platform</p>
         </div>
@@ -642,7 +642,7 @@ export default function AuthForm({ initialTab = 'login' }: { initialTab?: AuthTa
 
         {/* Footer */}
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Smart River · Platform monitoring sungai
+          EcoRiver · Platform monitoring sungai
         </p>
       </div>
     </div>

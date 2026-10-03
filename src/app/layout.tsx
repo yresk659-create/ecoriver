@@ -11,9 +11,9 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Smart River — Platform Monitoring Sungai',
+  title: 'EcoRiver — Platform Monitoring Sungai',
   description:
-    'Kenali Smart River dan pantau kondisi sungai, status perangkat, pembacaan sensor, serta peringatan melalui satu dashboard.',
+    'Kenali EcoRiver dan pantau kondisi sungai, status perangkat, pembacaan sensor, serta peringatan melalui satu dashboard.',
   icons: {
     icon: [{ url: '/favicon.ico', type: 'image/x-icon' }],
   },

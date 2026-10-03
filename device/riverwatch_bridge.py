@@ -1,4 +1,4 @@
-"""Local Raspberry Pi bridge for Smart River -> RiverWatch.
+"""Local Raspberry Pi bridge for EcoRiver -> RiverWatch.
 
 Run this beside final v3.2.py. The robot posts to the local Flask endpoint, while
 this process handles authenticated HTTPS delivery and periodic heartbeat data,
@@ -32,7 +32,7 @@ def required_env(name: str) -> str:
 
 RIVERWATCH_ORIGIN = required_env("RIVERWATCH_ORIGIN").rstrip("/")
 RIVERWATCH_DEVICE_TOKEN = required_env("RIVERWATCH_DEVICE_TOKEN")
-RIVERWATCH_DEVICE_ID = os.environ.get("RIVERWATCH_DEVICE_ID", "smart-river-hardware").strip()
+RIVERWATCH_DEVICE_ID = os.environ.get("RIVERWATCH_DEVICE_ID", "ecoriver-hardware").strip()
 LOCAL_STATUS_URL = os.environ.get("SMART_RIVER_LOCAL_STATUS_URL", "http://127.0.0.1:5000/status").strip()
 HEARTBEAT_SECONDS = max(2.0, float(os.environ.get("RIVERWATCH_HEARTBEAT_SECONDS", "5")))
 BRIDGE_PORT = int(os.environ.get("RIVERWATCH_BRIDGE_PORT", "5050"))
@@ -212,7 +212,7 @@ def heartbeat_worker() -> None:
             if isinstance(status, dict):
                 enqueue("telemetry", normalized_payload(status, heartbeat=True))
         except (requests.RequestException, ValueError) as exc:
-            logger.warning("Status lokal Smart River belum dapat dibaca: %s", exc)
+            logger.warning("Status lokal EcoRiver belum dapat dibaca: %s", exc)
         elapsed = time.monotonic() - started_at
         time.sleep(max(0.2, HEARTBEAT_SECONDS - elapsed))
 

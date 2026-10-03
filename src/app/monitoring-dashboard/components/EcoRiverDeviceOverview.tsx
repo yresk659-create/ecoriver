@@ -16,7 +16,7 @@ import {
   Waves,
   Zap,
 } from 'lucide-react';
-import type { SmartRiverDeviceState } from '@/lib/types';
+import type { EcoRiverDeviceState } from '@/lib/types';
 
 function Metric({
   icon,
@@ -50,11 +50,11 @@ function formatNumber(value: number, maximumFractionDigits = 2): string {
   return new Intl.NumberFormat('id-ID', { maximumFractionDigits }).format(value);
 }
 
-export default function SmartRiverDeviceOverview({
+export default function EcoRiverDeviceOverview({
   state,
   model,
 }: {
-  state: SmartRiverDeviceState;
+  state: EcoRiverDeviceState;
   model?: React.ReactNode;
 }) {
   const hasCoordinates = state.latitude !== 0 || state.longitude !== 0;
@@ -74,7 +74,7 @@ export default function SmartRiverDeviceOverview({
                 <Bot size={21} />
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Perangkat Smart River</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Perangkat EcoRiver</p>
                 <h2 className="mt-1 text-lg font-semibold tracking-tight text-foreground">{state.deviceId}</h2>
                 <p className="mt-1 text-xs text-muted-foreground">Telemetri diterima {observedAt}</p>
               </div>
@@ -119,7 +119,7 @@ export default function SmartRiverDeviceOverview({
       </div>
 
       <div id="monitoring-overview">
-        <section id="sensor-metrics" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Data sensor Smart River">
+        <section id="sensor-metrics" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Data sensor EcoRiver">
           <Metric icon={<Lightbulb size={16} />} label="Sensor cahaya (LDR)" value={formatNumber(state.ldr)} note="Nilai mentah dari ESP32" />
           <Metric icon={<Droplets size={16} />} label="Sensor air" value={formatNumber(state.water)} note="Nilai mentah dari ESP32" />
           <Metric icon={<Gauge size={16} />} label="Jarak objek" value={formatNumber(state.distanceCm, 1)} unit="cm" />

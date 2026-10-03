@@ -11,9 +11,9 @@ export default function AIAssistantPreview() {
           <div className="section-kicker mb-6">
             RiverWatch AI
           </div>
-          <h2 className="text-section-title text-foreground">Pendamping saat menjelajahi Smart River</h2>
+          <h2 className="text-section-title text-foreground">Pendamping saat menjelajahi EcoRiver</h2>
           <p className="mt-5 text-sm leading-7 text-muted-foreground lg:text-base">
-            RiverWatch AI membantu menjelaskan Smart River, fitur dashboard, dan istilah monitoring dengan bahasa yang menyesuaikan percakapan Anda.
+            RiverWatch AI membantu menjelaskan EcoRiver, fitur dashboard, dan istilah monitoring dengan bahasa yang menyesuaikan percakapan Anda.
           </p>
         </Reveal>
         <Reveal delay={90}>

@@ -151,21 +151,21 @@ export default function BotpressWebchat() {
         conversationStarters: [
           {
             id: 'how_it_works',
-            text: 'Bagaimana cara kerja Smart River?',
+            text: 'Bagaimana cara kerja EcoRiver?',
             title: 'Cara Kerja',
             icon: 'circle-help',
             enabled: true,
           },
           {
             id: 'contact_support',
-            text: 'Saya membutuhkan bantuan langsung dari Team Support Smart River. Tolong arahkan saya untuk menghubungi smartriver.auth@gmail.com melalui email.',
+            text: 'Saya membutuhkan bantuan langsung dari Team Support EcoRiver. Tolong arahkan saya untuk menghubungi smartriver.auth@gmail.com melalui email.',
             title: 'Hubungi Dukungan',
             icon: 'message-circle',
             enabled: true,
           },
           {
             id: 'manage_account',
-            text: 'Bagaimana cara mengelola akun Smart River?',
+            text: 'Bagaimana cara mengelola akun EcoRiver?',
             title: 'Kelola Akun',
             icon: 'user',
             enabled: true,

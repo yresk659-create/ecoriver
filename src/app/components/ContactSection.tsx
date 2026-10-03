@@ -7,7 +7,7 @@ const setupSteps = [
     id: 'account',
     icon: UserPlus,
     title: 'Buat akun',
-    text: 'Daftarkan akun Smart River Anda dan selesaikan verifikasi keamanan.',
+    text: 'Daftarkan akun EcoRiver Anda dan selesaikan verifikasi keamanan.',
   },
   {
     id: 'dashboard',
@@ -19,7 +19,7 @@ const setupSteps = [
     id: 'ai',
     icon: Bot,
     title: 'Gunakan RiverWatch AI',
-    text: 'Ajukan pertanyaan untuk memahami Smart River dan istilah yang muncul saat monitoring.',
+    text: 'Ajukan pertanyaan untuk memahami EcoRiver dan istilah yang muncul saat monitoring.',
   },
 ];
 
@@ -33,10 +33,10 @@ export default function ContactSection() {
           </div>
           <h2 className="text-section-title text-foreground">
             Mulai mengenal dan memantau<br />
-            <span className="text-gradient">bersama Smart River</span>
+            <span className="text-gradient">bersama EcoRiver</span>
           </h2>
           <p className="mt-5 text-sm leading-7 text-muted-foreground lg:text-base">
-            Buat akun untuk mencoba pengalaman monitoring perangkat Smart River melalui dashboard yang aman dan mudah digunakan.
+            Buat akun untuk mencoba pengalaman monitoring perangkat EcoRiver melalui dashboard yang aman dan mudah digunakan.
           </p>
         </Reveal>
 

@@ -1,15 +1,15 @@
 [Unit]
 Description=RiverWatch HTTPS telemetry bridge
 Wants=network-online.target
-After=network-online.target smart-river-controller.service
+After=network-online.target ecoriver-controller.service
 
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/SmartRiver
-EnvironmentFile=/home/pi/SmartRiver/device/riverwatch-bridge.env
+WorkingDirectory=/home/pi/EcoRiver
+EnvironmentFile=/home/pi/EcoRiver/device/riverwatch-bridge.env
 Environment=PYTHONUNBUFFERED=1
-ExecStart=/home/pi/SmartRiver/.venv/bin/python3 /home/pi/SmartRiver/device/riverwatch_bridge.py
+ExecStart=/home/pi/EcoRiver/.venv/bin/python3 /home/pi/EcoRiver/device/riverwatch_bridge.py
 Restart=on-failure
 RestartSec=5
 

@@ -1,5 +1,5 @@
 /*
- * Smart River - ESP32 controller
+ * EcoRiver - ESP32 controller
  *
  * Komunikasi dengan Raspberry Pi menggunakan JSON per baris (NDJSON) melalui
  * UART2. ESP32 mengirim telemetry secara berkala dan menerima command JSON dari
@@ -14,7 +14,7 @@
  * - MG996S, motor L298N, dan ULN2003 harus memakai catu daya eksternal yang
  *   sesuai. Satukan GND catu daya dengan GND ESP32.
  * - INA219 memakai I2C (SDA/SCL 21/22 pada ESP32 Dev Module).
- * - Pin di bawah mengikuti pemetaan wiring Smart River yang diberikan setelah
+ * - Pin di bawah mengikuti pemetaan wiring EcoRiver yang diberikan setelah
  *   perbaikan: INA219 tetap memakai I2C 21/22, sedangkan L298N IN4 dipindah
  *   ke GPIO0. GPIO0 adalah pin strap BOOT; jangan biarkan rangkaian L298N
  *   menariknya LOW ketika ESP32 sedang reset atau masuk mode upload.
@@ -31,7 +31,7 @@
 
 // ---------------------------------------------------------------------------
 // Pin map - ESP32 Dev Module / WROOM-32
-// EDIT bagian ini agar sesuai wiring Smart River sebelum perangkat diberi daya.
+// EDIT bagian ini agar sesuai wiring EcoRiver sebelum perangkat diberi daya.
 // ---------------------------------------------------------------------------
 
 namespace Pins {
@@ -852,7 +852,7 @@ void setup() {
   state.lastSensorAt = millis() - SENSOR_INTERVAL_MS;
   state.lastTelemetryAt = millis() - TELEMETRY_INTERVAL_MS;
   setHealth(esp32Health, ComponentStatus::Ok,
-            "ESP32 aktif dan firmware Smart River berjalan.");
+            "ESP32 aktif dan firmware EcoRiver berjalan.");
   setHealth(ajsnHealth, ComponentStatus::Unknown,
             "Menunggu echo pertama dari AJSN-SR04T.");
   setHealth(ldrHealth, ComponentStatus::Unknown,
@@ -874,7 +874,7 @@ void setup() {
   setHealth(thrusterHealth, ComponentStatus::Unknown,
             "Belum ada kanal umpan balik thruster.");
 
-  Serial.println(F("Smart River ESP32 siap; UART Raspberry Pi = 115200 baud"));
+  Serial.println(F("EcoRiver ESP32 siap; UART Raspberry Pi = 115200 baud"));
 }
 
 void loop() {

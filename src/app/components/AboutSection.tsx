@@ -15,14 +15,14 @@ export default function AboutSection() {
       <div className="mx-auto grid max-w-screen-xl grid-cols-1 items-center gap-12 px-4 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <Reveal className="reveal-copy">
           <div className="section-kicker mb-6">
-            Mengenal Smart River
+            Mengenal EcoRiver
           </div>
           <h2 className="mb-5 text-section-title text-foreground">
             Satu platform untuk memahami<br />
             <span className="text-gradient">sungai dan perangkatnya</span>
           </h2>
           <p className="mb-6 text-sm leading-7 text-muted-foreground lg:text-base">
-            Smart River adalah platform digital yang membantu Anda melihat kondisi sungai dan memantau perangkat melalui satu tampilan yang ringkas, terstruktur, dan mudah dipahami.
+            EcoRiver adalah platform digital yang membantu Anda melihat kondisi sungai dan memantau perangkat melalui satu tampilan yang ringkas, terstruktur, dan mudah dipahami.
           </p>
           <p className="text-sm leading-7 text-muted-foreground lg:text-base">
             Pembacaan sensor, status operasional, riwayat perubahan, peringatan, dan informasi pendukung disusun agar Anda dapat menemukan hal penting tanpa berpindah-pindah sistem.

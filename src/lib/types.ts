@@ -68,16 +68,16 @@ export interface AIDetection {
 }
 
 /**
- * Health reported by an individual Smart River component.
+ * Health reported by an individual EcoRiver component.
  *
  * This is optional because older firmware/bridge payloads only contain the
  * device-level telemetry fields below.  `unknown` is intentionally different
  * from `error`: it means the component has not supplied a diagnostic result.
  */
-export type SmartRiverComponentStatus = 'ok' | 'error' | 'unknown';
+export type EcoRiverComponentStatus = 'ok' | 'error' | 'unknown';
 
-export interface SmartRiverComponentHealth {
-  status: SmartRiverComponentStatus;
+export interface EcoRiverComponentHealth {
+  status: EcoRiverComponentStatus;
   detail?: string;
   checkedAt?: string;
 }
@@ -87,27 +87,27 @@ export interface SmartRiverComponentHealth {
  * `components` object.  Every entry is optional so a device can report only
  * the diagnostics it actually supports.
  */
-export interface SmartRiverComponentHealthMap {
-  camera?: SmartRiverComponentHealth;
-  esp32?: SmartRiverComponentHealth;
-  ina219?: SmartRiverComponentHealth;
-  ajsn?: SmartRiverComponentHealth;
-  gps?: SmartRiverComponentHealth;
-  ldr?: SmartRiverComponentHealth;
-  waterLevel?: SmartRiverComponentHealth;
-  servo?: SmartRiverComponentHealth;
-  l298n?: SmartRiverComponentHealth;
-  uln2003?: SmartRiverComponentHealth;
-  led?: SmartRiverComponentHealth;
-  buzzer?: SmartRiverComponentHealth;
-  distanceSensor?: SmartRiverComponentHealth;
-  conveyor?: SmartRiverComponentHealth;
-  power?: SmartRiverComponentHealth;
-  thruster?: SmartRiverComponentHealth;
-  raspberryPi?: SmartRiverComponentHealth;
+export interface EcoRiverComponentHealthMap {
+  camera?: EcoRiverComponentHealth;
+  esp32?: EcoRiverComponentHealth;
+  ina219?: EcoRiverComponentHealth;
+  ajsn?: EcoRiverComponentHealth;
+  gps?: EcoRiverComponentHealth;
+  ldr?: EcoRiverComponentHealth;
+  waterLevel?: EcoRiverComponentHealth;
+  servo?: EcoRiverComponentHealth;
+  l298n?: EcoRiverComponentHealth;
+  uln2003?: EcoRiverComponentHealth;
+  led?: EcoRiverComponentHealth;
+  buzzer?: EcoRiverComponentHealth;
+  distanceSensor?: EcoRiverComponentHealth;
+  conveyor?: EcoRiverComponentHealth;
+  power?: EcoRiverComponentHealth;
+  thruster?: EcoRiverComponentHealth;
+  raspberryPi?: EcoRiverComponentHealth;
 }
 
-export interface SmartRiverDeviceState {
+export interface EcoRiverDeviceState {
   schemaVersion: 1;
   deviceId: string;
   observedAt: string;
@@ -128,7 +128,7 @@ export interface SmartRiverDeviceState {
   trashDetected: boolean;
   detectionConfidence: number;
   /** Normalized form of the optional wire-level `components` diagnostics. */
-  componentHealth?: SmartRiverComponentHealthMap;
+  componentHealth?: EcoRiverComponentHealthMap;
 }
 
 export interface Notification {

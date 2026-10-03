@@ -146,7 +146,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <AppLogo size={32} />
           {!collapsed && (
             <div className="min-w-0">
-              <span className="font-bold text-sm text-foreground block leading-tight">Smart River</span>
+              <span className="font-bold text-sm text-foreground block leading-tight">EcoRiver</span>
               <span className="text-xs text-muted-foreground leading-tight">Monitoring perangkat</span>
             </div>
           )}

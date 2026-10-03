@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap Smart River software on Raspberry Pi OS 64-bit.
+# Bootstrap EcoRiver software on Raspberry Pi OS 64-bit.
 #
 # Run from the repository root with:
 #   bash device/install_pi.sh
@@ -57,11 +57,11 @@ else
 fi
 
 echo
-echo "Pemasangan software selesai. Langkah selanjutnya:"
+echo "Pemasangan software EcoRiver selesai. Langkah selanjutnya:"
 echo "  1. sudo raspi-config  (Serial login: No, serial hardware: Yes), lalu reboot"
 echo "  2. nano device/riverwatch-bridge.env"
 echo "  3. source .venv/bin/activate"
 echo "  4. set -a; source device/riverwatch-bridge.env; set +a"
 echo "  5. python3 device/preflight_pi.py"
 echo
-echo "SMART_RIVER_AUTONOMOUS tetap 0 secara default; aktuator tidak akan digerakkan."
+echo "ECORIVER_AUTONOMOUS tetap 0 secara default; aktuator tidak akan digerakkan."

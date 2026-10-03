@@ -5,8 +5,8 @@ import type {
   AIDetection,
   RiverAlert,
   SensorReading,
-  SmartRiverComponentHealthMap,
-  SmartRiverDeviceState,
+  EcoRiverComponentHealthMap,
+  EcoRiverDeviceState,
   WaterLevelDataPoint,
   WaterQualityDataPoint,
 } from '@/lib/types';
@@ -79,7 +79,7 @@ export interface CurrentMonitoringData {
   waterLevel: WaterLevelReport;
   waterQuality: WaterQualityReport;
   objectDetections: AIDetection[];
-  deviceState: SmartRiverDeviceState | null;
+  deviceState: EcoRiverDeviceState | null;
 }
 
 export interface AssistantResponse {
@@ -138,7 +138,7 @@ function asNumber(value: unknown): number | undefined {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 }
 
-const componentHealthKeys: (keyof SmartRiverComponentHealthMap)[] = [
+const componentHealthKeys: (keyof EcoRiverComponentHealthMap)[] = [
   'camera',
   'esp32',
   'ina219',
@@ -159,9 +159,9 @@ const componentHealthKeys: (keyof SmartRiverComponentHealthMap)[] = [
 ];
 
 /** Keep pull integrations as defensive as the push API. */
-function parseComponentHealth(value: unknown): SmartRiverComponentHealthMap | undefined {
+function parseComponentHealth(value: unknown): EcoRiverComponentHealthMap | undefined {
   if (!isRecord(value)) return undefined;
-  const parsed: SmartRiverComponentHealthMap = {};
+  const parsed: EcoRiverComponentHealthMap = {};
   for (const key of componentHealthKeys) {
     const item = value[key];
     if (!isRecord(item)) continue;
@@ -209,7 +209,7 @@ function pullTelemetryAliases(value: Record<string, unknown>, deviceId: string):
   };
 }
 
-function parsePullDeviceState(value: unknown, deviceId: string): SmartRiverDeviceState | null {
+function parsePullDeviceState(value: unknown, deviceId: string): EcoRiverDeviceState | null {
   if (!isRecord(value)) return null;
   const stateCandidate = isRecord(value.deviceState) ? value.deviceState : value;
 
@@ -280,16 +280,16 @@ function unique(values: string[]): string[] {
 
 function unavailableSource(description: string): MonitoringDataSource {
   return {
-    id: 'smart-river-not-connected',
+    id: 'ecoriver-not-connected',
     mode: 'unavailable',
     connectedToHardware: false,
     description,
   };
 }
 
-function hardwareSource(description = 'Data diterima dari integrasi perangkat Smart River.'): MonitoringDataSource {
+function hardwareSource(description = 'Data diterima dari integrasi perangkat EcoRiver.'): MonitoringDataSource {
   return {
-    id: nonEmptyEnv('SMART_RIVER_SOURCE_ID') ?? 'smart-river-hardware',
+    id: nonEmptyEnv('SMART_RIVER_SOURCE_ID') ?? 'ecoriver-hardware',
     mode: 'hardware',
     connectedToHardware: true,
     description,
@@ -305,7 +305,7 @@ function hardwareSource(description = 'Data diterima dari integrasi perangkat Sm
  * disconnected device here.  Missing diagnostics remain compatible with
  * older integrations and are checked by the normal age-based stale window.
  */
-function deviceHeartbeatFailed(state: SmartRiverDeviceState): boolean {
+function deviceHeartbeatFailed(state: EcoRiverDeviceState): boolean {
   const esp32Status = state.componentHealth?.esp32?.status;
   const raspberryPiStatus = state.componentHealth?.raspberryPi?.status;
   return esp32Status === 'error' || raspberryPiStatus === 'error';
@@ -550,7 +550,7 @@ function parseHardwarePayload(value: unknown): CurrentMonitoringData | null {
   const root = isRecord(value) && isRecord(value.data) ? value.data : value;
   if (!isRecord(root)) return null;
 
-  const deviceId = nonEmptyEnv('SMART_RIVER_SOURCE_ID') ?? 'smart-river-hardware';
+  const deviceId = nonEmptyEnv('SMART_RIVER_SOURCE_ID') ?? 'ecoriver-hardware';
   const deviceState = parsePullDeviceState(root, deviceId);
   // Legacy pull integrations expose station arrays, while a Pi/ESP32 status
   // endpoint may expose only a device telemetry object. Accept either shape,
@@ -597,13 +597,13 @@ function parseHardwarePayload(value: unknown): CurrentMonitoringData | null {
   };
 }
 
-function deviceAlerts(state: SmartRiverDeviceState): RiverAlert[] {
+function deviceAlerts(state: EcoRiverDeviceState): RiverAlert[] {
   if (!state.remoteMode) return [];
   return [
     {
       id: `${state.deviceId}-remote-${state.observedAt}`,
       stationId: state.deviceId,
-      stationName: 'Smart River',
+      stationName: 'EcoRiver',
       type: 'Mode perangkat',
       message: 'Perangkat melaporkan mode remote/power rendah dan menghentikan operasi otomatis.',
       severity: 'warning',
@@ -619,7 +619,7 @@ async function fetchStoredHardwareMonitoring(): Promise<MonitoringRepositoryResu
     const stored = await readStoredDeviceMonitoring(deviceId);
     if (!stored) {
       return result(
-        unavailableSource('Belum ada telemetri yang diterima dari perangkat Smart River.'),
+        unavailableSource('Belum ada telemetri yang diterima dari perangkat EcoRiver.'),
         emptyMonitoring()
       );
     }
@@ -633,8 +633,8 @@ async function fetchStoredHardwareMonitoring(): Promise<MonitoringRepositoryResu
       return result(
         unavailableSource(
           deviceHeartbeatFailed(stored.state)
-            ? 'ESP32 tidak mengirim telemetry terbaru. Periksa koneksi UART dan catu daya perangkat Smart River.'
-            : `Perangkat Smart River tidak mengirim heartbeat terbaru. Data terakhir diterima ${stored.state.receivedAt}.`,
+            ? 'ESP32 tidak mengirim telemetry terbaru. Periksa koneksi UART dan catu daya perangkat EcoRiver.'
+            : `Perangkat EcoRiver tidak mengirim heartbeat terbaru. Data terakhir diterima ${stored.state.receivedAt}.`,
         ),
         emptyMonitoring()
       );
@@ -643,11 +643,11 @@ async function fetchStoredHardwareMonitoring(): Promise<MonitoringRepositoryResu
     const cameras: MonitoringCamera[] = [
       {
         id: `${deviceId}-camera`,
-        name: 'Kamera Smart River',
+        name: 'Kamera EcoRiver',
         locations:
           stored.state.latitude !== 0 || stored.state.longitude !== 0
             ? [`${stored.state.latitude.toFixed(6)}, ${stored.state.longitude.toFixed(6)}`]
-            : ['Smart River'],
+            : ['EcoRiver'],
         detectionCount: stored.detections.length,
         ...(stored.detections[0]?.timestamp ? { lastDetectionAt: stored.detections[0].timestamp } : {}),
         detectedObjectTypes: stored.detections.length ? ['Sampah'] : [],
@@ -656,7 +656,7 @@ async function fetchStoredHardwareMonitoring(): Promise<MonitoringRepositoryResu
     ];
 
     return {
-      source: hardwareSource('Telemetri langsung diterima dari Raspberry Pi Smart River.'),
+      source: hardwareSource('Telemetri langsung diterima dari Raspberry Pi EcoRiver.'),
       // The source timestamp must describe the device sample, not the time
       // this request happened.  This keeps the dashboard/assistant context
       // and freshness label aligned with the actual telemetry.
@@ -674,7 +674,7 @@ async function fetchStoredHardwareMonitoring(): Promise<MonitoringRepositoryResu
     };
   } catch {
     return result(
-      unavailableSource('Penyimpanan telemetri Smart River belum siap. Terapkan migrasi database perangkat dan periksa konfigurasinya.'),
+      unavailableSource('Penyimpanan telemetri EcoRiver belum siap. Terapkan migrasi database perangkat dan periksa konfigurasinya.'),
       emptyMonitoring()
     );
   }
@@ -708,7 +708,7 @@ async function fetchHardwareMonitoring(): Promise<MonitoringRepositoryResult<Cur
       if (!data) throw new Error('Invalid hardware payload');
       if (data.deviceState && deviceHeartbeatFailed(data.deviceState)) {
         return result(
-          unavailableSource('ESP32 tidak mengirim telemetry terbaru. Periksa koneksi UART dan catu daya perangkat Smart River.'),
+          unavailableSource('ESP32 tidak mengirim telemetry terbaru. Periksa koneksi UART dan catu daya perangkat EcoRiver.'),
           emptyMonitoring(),
         );
       }
@@ -718,7 +718,7 @@ async function fetchHardwareMonitoring(): Promise<MonitoringRepositoryResult<Cur
     }
   } catch {
     return result(
-      unavailableSource('Integrasi Smart River belum dapat dihubungi. Periksa koneksi perangkat dan konfigurasi integrasi.'),
+      unavailableSource('Integrasi EcoRiver belum dapat dihubungi. Periksa koneksi perangkat dan konfigurasi integrasi.'),
       emptyMonitoring()
     );
   }
@@ -765,7 +765,7 @@ export async function getWaterQuality(): Promise<MonitoringRepositoryResult<Wate
 
 function compactHardwareContext(monitoring: MonitoringRepositoryResult<CurrentMonitoringData>): string {
   if (!monitoring.source.connectedToHardware) {
-    return 'Tidak ada perangkat Smart River yang sedang terhubung. Jangan mengklaim mengetahui kondisi sungai, sensor, kamera, atau alert saat ini.';
+    return 'Tidak ada perangkat EcoRiver yang sedang terhubung. Jangan mengklaim mengetahui kondisi sungai, sensor, kamera, atau alert saat ini.';
   }
 
   const context = {
@@ -777,7 +777,7 @@ function compactHardwareContext(monitoring: MonitoringRepositoryResult<CurrentMo
     objectDetections: monitoring.data.objectDetections,
     deviceState: monitoring.data.deviceState,
   };
-  return `Snapshot perangkat Smart River yang dapat dipakai sebagai konteks (waktu ${monitoring.timestamp}):\n${JSON.stringify(context).slice(0, 14_000)}`;
+  return `Snapshot perangkat EcoRiver yang dapat dipakai sebagai konteks (waktu ${monitoring.timestamp}):\n${JSON.stringify(context).slice(0, 14_000)}`;
 }
 
 function conversationText(history: z.infer<typeof assistantHistoryEntrySchema>[] | undefined): string {

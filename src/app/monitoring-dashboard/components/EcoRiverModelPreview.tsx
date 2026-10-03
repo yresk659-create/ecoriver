@@ -8,24 +8,24 @@ const modelViews = [
   {
     label: 'Perspektif depan',
     shortLabel: 'Depan',
-    src: '/assets/images/smart-river/smart-river-front.png',
-    alt: 'Render 3D Smart River dari perspektif depan',
+    src: '/assets/images/ecoriver/ecoriver-front.png',
+    alt: 'Render 3D EcoRiver dari perspektif depan',
   },
   {
     label: 'Tampilan bawah',
     shortLabel: 'Bawah',
-    src: '/assets/images/smart-river/smart-river-underside.png',
-    alt: 'Render 3D Smart River dari bagian bawah',
+    src: '/assets/images/ecoriver/ecoriver-underside.png',
+    alt: 'Render 3D EcoRiver dari bagian bawah',
   },
   {
     label: 'Tampilan atas',
     shortLabel: 'Atas',
-    src: '/assets/images/smart-river/smart-river-top.png',
-    alt: 'Render 3D Smart River dari bagian atas',
+    src: '/assets/images/ecoriver/ecoriver-top.png',
+    alt: 'Render 3D EcoRiver dari bagian atas',
   },
 ] as const;
 
-export default function SmartRiverModelPreview({ connected = false }: { connected?: boolean }) {
+export default function EcoRiverModelPreview({ connected = false }: { connected?: boolean }) {
   const [activeView, setActiveView] = useState(0);
   const [autoRotate, setAutoRotate] = useState(true);
 
@@ -56,7 +56,7 @@ export default function SmartRiverModelPreview({ connected = false }: { connecte
     <section
       id="device-model"
       className="overflow-hidden rounded-2xl border border-primary/20 bg-card shadow-[var(--shadow-soft)]"
-      aria-label="Pratinjau 3D Smart River"
+      aria-label="Pratinjau 3D EcoRiver"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2.5">
@@ -64,7 +64,7 @@ export default function SmartRiverModelPreview({ connected = false }: { connecte
             <Box size={18} aria-hidden="true" />
           </span>
           <div>
-            <p className="text-sm font-semibold text-foreground">Gambaran 3D Smart River</p>
+            <p className="text-sm font-semibold text-foreground">Gambaran 3D EcoRiver</p>
             <p className="text-xs text-muted-foreground">
               {connected ? 'Model perangkat yang sedang terhubung' : 'Model referensi sambil menunggu koneksi alat'}
             </p>

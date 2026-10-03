@@ -15,13 +15,13 @@ import AlertsTable from './components/AlertsTable';
 import StationStatusList from './components/StationStatusList';
 import AIDetectionFeed from './components/AIDetectionFeed';
 import NewLoginModal from './components/NewLoginModal';
-import SmartRiverDeviceOverview from './components/SmartRiverDeviceOverview';
-import SmartRiverModelPreview from './components/SmartRiverModelPreview';
+import EcoRiverDeviceOverview from './components/EcoRiverDeviceOverview';
+import EcoRiverModelPreview from './components/EcoRiverModelPreview';
 import DeviceAnalyticsPanel from './components/DeviceAnalyticsPanel';
 
-const SmartRiver3DViewer = dynamic(() => import('./components/SmartRiver3DViewer'), {
+const EcoRiver3DViewer = dynamic(() => import('./components/EcoRiver3DViewer'), {
   ssr: false,
-  loading: () => <SmartRiverModelPreview connected />,
+  loading: () => <EcoRiverModelPreview connected />,
 });
 
 function AuthLoading() {
@@ -104,7 +104,7 @@ function MonitoringUnavailable({
       <div id="dashboard-overview" className="h-full overflow-y-auto p-4 sm:p-6">
         <div className="mx-auto grid min-h-full max-w-6xl items-center gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
           <Reveal>
-            <SmartRiverModelPreview />
+            <EcoRiverModelPreview />
           </Reveal>
           <Reveal delay={70}>
             <div className="w-full rounded-2xl border border-border bg-card p-6 text-center slide-up">
@@ -138,14 +138,14 @@ function HardwareNotConnected({ message, onRetry }: { message: string; onRetry: 
       <div id="dashboard-overview" className="h-full overflow-y-auto p-4 sm:p-6">
         <div className="mx-auto grid min-h-full max-w-6xl items-center gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
           <Reveal>
-            <SmartRiverModelPreview />
+            <EcoRiverModelPreview />
           </Reveal>
           <Reveal delay={70}>
             <div className="w-full rounded-2xl border border-border bg-card p-7 text-center shadow-[var(--shadow-soft)] slide-up">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
                 <Cable size={27} className="text-primary" />
               </div>
-              <h1 className="mt-4 text-lg font-semibold tracking-[-0.02em] text-foreground">Smart River belum terhubung</h1>
+              <h1 className="mt-4 text-lg font-semibold tracking-[-0.02em] text-foreground">EcoRiver belum terhubung</h1>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Pratinjau alat tetap tersedia. Data monitoring akan muncul setelah perangkat terintegrasi.
               </p>
@@ -332,10 +332,10 @@ function DashboardContent() {
           </Reveal>
 
           <Reveal delay={40}>
-            <SmartRiverDeviceOverview
+            <EcoRiverDeviceOverview
               state={monitoring.deviceState}
               model={
-                <SmartRiver3DViewer
+                <EcoRiver3DViewer
                   state={monitoring.deviceState}
                   connected={monitoring.source.connectedToHardware}
                 />
@@ -390,7 +390,7 @@ function DashboardContent() {
         </Reveal>
 
         <Reveal delay={30}>
-          <SmartRiver3DViewer
+          <EcoRiver3DViewer
             state={monitoring.deviceState}
             connected={monitoring.source.connectedToHardware}
           />

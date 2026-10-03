@@ -17,8 +17,8 @@ import {
   XCircle,
   Zap,
 } from 'lucide-react';
-import type { SmartRiverComponentHealthMap, SmartRiverDeviceState } from '@/lib/types';
-import SmartRiverModelPreview from './SmartRiverModelPreview';
+import type { EcoRiverComponentHealthMap, EcoRiverDeviceState } from '@/lib/types';
+import EcoRiverModelPreview from './EcoRiverModelPreview';
 
 type HealthStatus = 'ok' | 'warning' | 'error';
 type MarkerIcon = 'camera' | 'sensor' | 'conveyor' | 'power' | 'thruster';
@@ -62,7 +62,7 @@ const markerDefinitions: MarkerDefinition[] = [
   {
     id: 'power-box',
     label: 'Kotak elektronik',
-    detail: 'Ruang elektronik dan catu daya Smart River.',
+    detail: 'Ruang elektronik dan catu daya EcoRiver.',
     partPattern: /SR_P_ElectricalBox(?!Cap)/i,
     icon: 'power',
   },
@@ -83,7 +83,7 @@ function ComponentIcon({ type, size = 14 }: { type: MarkerIcon; size?: number })
   return <Waves size={size} aria-hidden="true" />;
 }
 
-const diagnosticKeyByMarker: Record<string, keyof SmartRiverComponentHealthMap> = {
+const diagnosticKeyByMarker: Record<string, keyof EcoRiverComponentHealthMap> = {
   camera: 'camera',
   'distance-sensor': 'distanceSensor',
   conveyor: 'conveyor',
@@ -91,7 +91,7 @@ const diagnosticKeyByMarker: Record<string, keyof SmartRiverComponentHealthMap> 
   thruster: 'thruster',
 };
 
-const diagnosticFallbackByMarker: Record<string, keyof SmartRiverComponentHealthMap> = {
+const diagnosticFallbackByMarker: Record<string, keyof EcoRiverComponentHealthMap> = {
   'distance-sensor': 'ajsn',
   'power-box': 'ina219',
   conveyor: 'uln2003',
@@ -99,9 +99,9 @@ const diagnosticFallbackByMarker: Record<string, keyof SmartRiverComponentHealth
 };
 
 interface DiagnosticDefinition {
-  key: keyof SmartRiverComponentHealthMap;
+  key: keyof EcoRiverComponentHealthMap;
   label: string;
-  fallbackKey?: keyof SmartRiverComponentHealthMap;
+  fallbackKey?: keyof EcoRiverComponentHealthMap;
   /**
    * ID of the 3D marker this diagnostic belongs to. Spatial diagnostics are
    * rendered only while their marker is facing the camera; diagnostics that
@@ -130,7 +130,7 @@ const diagnosticDefinitions: DiagnosticDefinition[] = [
   { key: 'raspberryPi', label: 'Raspberry Pi' },
 ];
 
-function reportedDiagnostic(markerId: string, state: SmartRiverDeviceState | null) {
+function reportedDiagnostic(markerId: string, state: EcoRiverDeviceState | null) {
   const key = diagnosticKeyByMarker[markerId];
   if (!key || !state?.componentHealth) return undefined;
   return state.componentHealth[key] ?? state.componentHealth[diagnosticFallbackByMarker[markerId]];
@@ -138,14 +138,14 @@ function reportedDiagnostic(markerId: string, state: SmartRiverDeviceState | nul
 
 function reportedComponentDiagnostic(
   definition: DiagnosticDefinition,
-  state: SmartRiverDeviceState | null,
+  state: EcoRiverDeviceState | null,
 ) {
   if (!state?.componentHealth) return undefined;
   return state.componentHealth[definition.key] ??
     (definition.fallbackKey ? state.componentHealth[definition.fallbackKey] : undefined);
 }
 
-function diagnosticStatus(health: SmartRiverComponentHealthMap[keyof SmartRiverComponentHealthMap] | undefined): {
+function diagnosticStatus(health: EcoRiverComponentHealthMap[keyof EcoRiverComponentHealthMap] | undefined): {
   kind: HealthStatus;
   label: string;
 } {
@@ -154,7 +154,7 @@ function diagnosticStatus(health: SmartRiverComponentHealthMap[keyof SmartRiverC
   return { kind: 'warning', label: 'Belum terverifikasi' };
 }
 
-function statusFor(markerId: string, state: SmartRiverDeviceState | null): { kind: HealthStatus; label: string } {
+function statusFor(markerId: string, state: EcoRiverDeviceState | null): { kind: HealthStatus; label: string } {
   const diagnostic = reportedDiagnostic(markerId, state);
   if (diagnostic?.status === 'ok') return { kind: 'ok', label: 'Berfungsi' };
   if (diagnostic?.status === 'error') return { kind: 'error', label: 'Bermasalah' };
@@ -189,7 +189,7 @@ function statusColor(kind: HealthStatus): string {
   return 'text-red-600 dark:text-red-400';
 }
 
-function markerDescription(markerId: string, state: SmartRiverDeviceState | null): string {
+function markerDescription(markerId: string, state: EcoRiverDeviceState | null): string {
   const diagnostic = reportedDiagnostic(markerId, state);
   if (diagnostic) {
     const checkedAt = diagnostic.checkedAt ? new Date(diagnostic.checkedAt) : null;
@@ -242,7 +242,7 @@ function ComponentDiagnostics({
   state,
   visibleIds,
 }: {
-  state: SmartRiverDeviceState | null;
+  state: EcoRiverDeviceState | null;
   /** IDs of markers currently facing the camera. Omit in the static fallback. */
   visibleIds?: string[];
 }) {
@@ -262,7 +262,7 @@ function ComponentDiagnostics({
     : false;
 
   return (
-    <div className="mt-4 border-t border-border pt-4" aria-label="Diagnostik komponen Smart River">
+    <div className="mt-4 border-t border-border pt-4" aria-label="Diagnostik komponen EcoRiver">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <p className="text-xs font-semibold text-foreground">Diagnostik komponen</p>
@@ -329,11 +329,11 @@ function ComponentDiagnostics({
   );
 }
 
-export default function SmartRiver3DViewer({
+export default function EcoRiver3DViewer({
   state,
   connected = Boolean(state),
 }: {
-  state: SmartRiverDeviceState | null;
+  state: EcoRiverDeviceState | null;
   /** The source can be connected even when it only exposes legacy station data. */
   connected?: boolean;
 }) {
@@ -367,7 +367,7 @@ export default function SmartRiver3DViewer({
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
     renderer.domElement.className = 'absolute inset-0 h-full w-full touch-none';
-    renderer.domElement.setAttribute('aria-label', 'Model 3D Smart River yang dapat diputar');
+    renderer.domElement.setAttribute('aria-label', 'Model 3D EcoRiver yang dapat diputar');
     mount.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -478,7 +478,7 @@ export default function SmartRiver3DViewer({
     const loader = new GLTFLoader();
     loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(
-      '/assets/models/smart-river.glb',
+      '/assets/models/ecoriver.glb',
       (gltf) => {
         if (disposed) return;
         const loadedModel = gltf.scene;
@@ -539,7 +539,7 @@ export default function SmartRiver3DViewer({
   if (loadError) {
     return (
       <div className="space-y-3">
-        <SmartRiverModelPreview connected={connected} />
+        <EcoRiverModelPreview connected={connected} />
         <p className="text-center text-xs text-muted-foreground">
           Viewer 3D tidak tersedia pada browser ini; pratinjau sudut alat tetap ditampilkan.
         </p>
@@ -557,7 +557,7 @@ export default function SmartRiver3DViewer({
     <section
       id="device-model"
       className="overflow-hidden rounded-2xl border border-primary/20 bg-card shadow-[var(--shadow-soft)]"
-      aria-label="Model 3D interaktif Smart River"
+      aria-label="Model 3D interaktif EcoRiver"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2.5">
@@ -565,7 +565,7 @@ export default function SmartRiver3DViewer({
             <Rotate3d size={18} aria-hidden="true" />
           </span>
           <div>
-            <p className="text-sm font-semibold text-foreground">Model 3D Smart River</p>
+            <p className="text-sm font-semibold text-foreground">Model 3D EcoRiver</p>
             <p className="text-xs text-muted-foreground">Seret untuk memutar · cubit atau scroll untuk zoom</p>
           </div>
         </div>

@@ -16,7 +16,7 @@ const features = [
     icon: Cpu,
     title: 'Status Perangkat',
     description:
-      'Periksa status sensor, waktu pembaruan, dan kondisi operasional perangkat Smart River.',
+      'Periksa status sensor, waktu pembaruan, dan kondisi operasional perangkat EcoRiver.',
   },
   {
     id: 'feat-waterlevel',
@@ -44,7 +44,7 @@ const features = [
     icon: Bot,
     title: 'Asisten AI',
     description:
-      'Tanyakan fungsi Smart River, arti parameter sensor, atau informasi yang sedang Anda pelajari.',
+      'Tanyakan fungsi EcoRiver, arti parameter sensor, atau informasi yang sedang Anda pelajari.',
   },
 ];
 
@@ -61,7 +61,7 @@ export default function FeaturesSection() {
             <span className="text-gradient">dalam satu Dashboard</span>
           </h2>
           <p className="mx-auto max-w-xl text-sm leading-7 text-muted-foreground lg:text-base">
-            Mulai dari status perangkat hingga tren kondisi sungai, Smart River menyajikannya dalam tampilan yang mudah ditelusuri.
+            Mulai dari status perangkat hingga tren kondisi sungai, EcoRiver menyajikannya dalam tampilan yang mudah ditelusuri.
           </p>
         </Reveal>
 

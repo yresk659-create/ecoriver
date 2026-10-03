@@ -13,12 +13,12 @@ export default function HeroSection() {
           <Waves size={13} /> Platform monitoring sungai pintar
         </div>
         <h1 className="mb-7 text-hero-display text-gradient-hero">
-          <span className="hero-title-line">Eksplorasi Smart River.</span>
+          <span className="hero-title-line">Eksplorasi EcoRiver.</span>
           <span className="hero-title-line">Amati Perangkat.</span>
           <span className="hero-title-line">Pulihkan Sungai.</span>
         </h1>
         <p className="mx-auto mb-10 max-w-2xl text-[0.95rem] leading-7 text-muted-foreground sm:text-base lg:text-lg">
-          Smart River membantu Anda memahami pembacaan sensor, memeriksa status perangkat, meninjau peringatan, dan memperoleh bantuan AI dari satu dashboard yang mudah digunakan.
+          EcoRiver membantu Anda memahami pembacaan sensor, memeriksa status perangkat, meninjau peringatan, dan memperoleh bantuan AI dari satu dashboard yang mudah digunakan.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link href="/sign-up-login-screen?mode=signup" className="button-primary group w-full gap-2 px-6 py-3.5 text-sm font-semibold sm:w-auto">
@@ -28,7 +28,7 @@ export default function HeroSection() {
             Masuk
           </Link>
           <a href="#monitoring" className="button-ghost w-full gap-2 px-5 py-3.5 text-sm font-medium sm:w-auto">
-            <ShieldCheck size={15} /> Pelajari Smart River
+            <ShieldCheck size={15} /> Pelajari EcoRiver
           </a>
         </div>
       </div>

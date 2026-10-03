@@ -43,11 +43,11 @@ export async function sendOtpEmail(
 
   await transporter.sendMail({
     from: {
-      name: 'Smart River',
+      name: 'EcoRiver',
       address: smtpUser,
     },
     to: email,
-    subject: 'Kode OTP Smart River',
+    subject: 'Kode OTP EcoRiver',
     text: `Halo, ${recipientName}\n\nGunakan Kode OTP berikut:\n\n${code}\n\nKode OTP ini berlaku selama 5 menit.\n\nJangan berikan kode ini kepada siapa pun.`,
     html: `<p>Halo, <strong>${escapeHtml(recipientName)}</strong></p>
 <p>Gunakan Kode OTP berikut:</p>
