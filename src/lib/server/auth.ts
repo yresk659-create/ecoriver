@@ -1271,7 +1271,12 @@ export function assertSameOrigin(request: Request): void {
   }
 
   if (origin !== expectedOrigin) {
-    throw new AuthError(403, 'Permintaan lintas situs ditolak.');
+  console.error('[EcoRiver Origin Check]', {
+    receivedOrigin: origin,
+    expectedOrigin: expectedOrigin,
+  });
+
+  throw new AuthError(403, 'Permintaan lintas situs ditolak.');
   }
 }
 
