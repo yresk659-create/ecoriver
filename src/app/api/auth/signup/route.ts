@@ -15,23 +15,34 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   let body: unknown;
+
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Body request harus berupa JSON.' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Body request harus berupa JSON.' },
+      { status: 400 }
+    );
   }
 
   const parsed = signupInputSchema.safeParse(body);
+
   if (!parsed.success) {
     return NextResponse.json(
-      { error: parsed.error.issues[0]?.message ?? 'Data pendaftaran tidak valid.' },
+      {
+        error:
+          parsed.error.issues[0]?.message ??
+          'Data pendaftaran tidak valid.',
+      },
       { status: 400 }
     );
   }
 
   try {
     assertSameOrigin(request);
+
     const result = await startSignup(parsed.data, request.headers);
+
     const response = NextResponse.json(
       {
         message: 'Kode OTP telah dikirim ke email Anda.',
@@ -40,15 +51,28 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
+
     response.cookies.set(
       PENDING_SIGNUP_COOKIE_NAME,
       result.pendingToken,
       pendingSignupCookieOptions(result.pendingExpiresAt)
     );
-    response.cookies.set(PENDING_LOGIN_COOKIE_NAME, '', expiredCookieOptions());
+
+    response.cookies.set(
+      PENDING_LOGIN_COOKIE_NAME,
+      '',
+      expiredCookieOptions()
+    );
+
     return response;
   } catch (error) {
+    console.error('[EcoRiver Signup Error]', error);
+
     const publicError = toPublicAuthError(error);
-    return NextResponse.json({ error: publicError.message }, { status: publicError.status });
+
+    return NextResponse.json(
+      { error: publicError.message },
+      { status: publicError.status }
+    );
   }
 }
